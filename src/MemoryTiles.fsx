@@ -216,6 +216,7 @@ module Model =
             Selection = NoneSelected
             Board = tiles
         }
+    let modelChangeEvent = (new Event<GameBoard>())
 
 module View = 
     open Model
@@ -262,45 +263,46 @@ module Controller =
             gameBoard
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
             |> GameBoard.updateSelected (OneSelected tile)
-            |> View.render tileClick
+            |> modelChangeEvent.Trigger
         | TwoSelected(t1, t2) when t1.Status = Matched -> 
             gameBoard
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
             |> GameBoard.updateTile t2.Row t2.Col { t2 with Status = UnMatched }
             |> GameBoard.updateSelected (OneSelected tile)
-            |> View.render tileClick  
+            |> modelChangeEvent.Trigger
         | TwoSelected(t1, t2) when t2.Status = Matched -> 
             gameBoard
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
             |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = UnMatched }
             |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
-            |> View.render tileClick  
+            |> modelChangeEvent.Trigger
         | TwoSelected(t1, t2) -> 
             gameBoard 
             |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = UnMatched }
             |> GameBoard.updateTile t2.Row t2.Col { t2 with Status = UnMatched }
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
             |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
-            |> View.render tileClick 
+            |> modelChangeEvent.Trigger
             
         | OneSelected t1 when t1.HiddenColor = tile.HiddenColor -> 
             gameBoard
             |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = Matched }
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = Matched }              
             |> GameBoard.updateSelected (TwoSelected ({ t1 with Status = Matched },{ tile with Status = Matched }))
-            |> View.render tileClick 
+            |> modelChangeEvent.Trigger
         | OneSelected t1 -> 
             gameBoard
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
             |> GameBoard.updateSelected (TwoSelected (t1, { tile with Status = AttemptingMatch }))
-            |> View.render tileClick 
+            |> modelChangeEvent.Trigger 
         | NoneSelected -> 
             gameBoard
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
             |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
-            |> View.render tileClick 
+            |> modelChangeEvent.Trigger
             
     let startGame() = 
         View.render tileClick (Model.generateRandomModel 4)
+        modelChangeEvent.Publish.Add(fun gameBoard -> View.render tileClick gameBoard)
 
 Controller.startGame()
