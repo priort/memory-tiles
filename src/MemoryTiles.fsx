@@ -222,7 +222,7 @@ module View =
     open Model
     
     let gameContainer = Browser.document.getElementById("memory-tiles-container")
-    let render tileClick (gameBoard:GameBoard)  = 
+    let render tileClickCallback startNewGameCallback (gameBoard:GameBoard)  = 
 
         gameContainer.innerHTML <- ""
         
@@ -244,11 +244,16 @@ module View =
                 tileDiv.style.backgroundColor <- bc
                 tileDiv.style.border <- "white solid 4px"
                 
-                let eventHandler r c d = Func<Browser.MouseEvent, obj>(fun _ -> tileClick r c gameBoard :> obj)
+                let eventHandler r c d = Func<Browser.MouseEvent, obj>(fun _ -> tileClickCallback r c gameBoard :> obj)
                 tileDiv.addEventListener_click(eventHandler rowIndex cIndex tileDiv)
 
                 rowDiv.appendChild tileDiv |> ignore   
-                gameContainer.appendChild rowDiv |> ignore 
+                gameContainer.appendChild rowDiv |> ignore
+
+        let startNewGameButton = Browser.document.createElement("button")
+        startNewGameButton.addEventListener_click(fun _ -> startNewGameCallback() :> obj)
+        startNewGameButton.innerText <- "Start Fresh Game"
+        gameContainer.appendChild startNewGameButton |> ignore
 
 module Controller = 
     open Model
@@ -300,9 +305,11 @@ module Controller =
             |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
             |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
             |> modelChangeEvent.Trigger
-            
-    let startGame() = 
-        View.render tileClick (Model.generateRandomModel 4)
-        modelChangeEvent.Publish.Add(fun gameBoard -> View.render tileClick gameBoard)
+    
+    let startGame() = modelChangeEvent.Trigger (Model.generateRandomModel 4)
+    
+    let initialise() = 
+        Model.modelChangeEvent.Publish.Add(fun gameBoard -> View.render tileClick startGame gameBoard)
+        startGame()
 
-Controller.startGame()
+Controller.initialise()
