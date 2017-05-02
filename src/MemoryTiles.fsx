@@ -253,7 +253,7 @@ module View =
 module Controller = 
     open Model
 
-    let rec tileClick tileRow tileCol (gameBoard: GameBoard) = 
+    let tileClick tileRow tileCol (gameBoard: GameBoard) = 
         let board = gameBoard.Board
         let tile = board.[tileRow].[tileCol] 
         let lastSelection = gameBoard.Selection
