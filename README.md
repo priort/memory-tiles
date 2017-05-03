@@ -1,5 +1,7 @@
 # Memory Tiles
 
+![Memory tiles screenshot](./memoryTiles.PNG)
+
 This is a memory game implemented with F# and Fable. 
 It displays a 4 X 4 grid of randomized colored tiles which are covered initially. The user selects 2 tiles in succession to uncover them. If the two selected tiles have the same hidden color, they are a match and they will stay open. If they do not match, they will be covered up again on the next tile selection.
 Almost all html colors are possible in the randomized grid generation so some colors can look close without being the same. Future versions will make this more configurable.
