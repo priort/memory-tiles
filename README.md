@@ -1,5 +1,8 @@
 # Memory Tiles
 
+Play current version: [Play Memory Tiles](http://htmlpreview.github.io/?https://github.com/priort/memory-tiles/blob/master/public/index.html)
+
+## Screenshot of the game
 ![Memory tiles screenshot](./memoryTiles.PNG)
 
 This is a memory game implemented with F# and Fable. 
