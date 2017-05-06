@@ -10862,7 +10862,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 __webpack_require__(126);
 
-var possibleColors = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_fable_core_List__["a" /* ofArray */])(["AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle"]);
+var possibleColors = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_fable_core_List__["a" /* ofArray */])(["Beige", "Blue", "Brown", "Crimson", "Cyan", "Grey", "Green", "Indigo", "Lime", "Magenta", "Navy", "Orange", "Pink", "Plum", "Purple", "Red", "Silver", "Yellow"]);
 var Model = function (__exports) {
     var GameBoard = __exports.GameBoard = function () {
         function GameBoard(selection, board) {
@@ -11161,133 +11161,165 @@ var View = function (__exports) {
 var Controller = function (__exports) {
     var tileClick = __exports.tileClick = function (tileRow, tileCol, gameBoard) {
         var tile = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_fable_core_Seq__["n" /* item */])(tileCol, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_fable_core_Seq__["n" /* item */])(tileRow, gameBoard.Board));
-        var $var98 = gameBoard.Selection.Case === "TwoSelected" ? (gameBoard.Selection.Fields[0].Status.Equals(new Model.TileStatus("Matched", [])) ? gameBoard.Selection.Fields[1].Status.Equals(new Model.TileStatus("Matched", [])) : false) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
 
-        switch ($var98[0]) {
-            case 0:
-                (function (arg00) {
-                    Model.modelChangeEvent.Trigger(arg00);
-                })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [tile]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                    var Status = new Model.TileStatus("AttemptingMatch", []);
-                    return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status);
-                }(), gameBoard)));
+        if (tile.Status.Equals(new Model.TileStatus("Matched", []))) {} else {
+            var $var86 = gameBoard.Selection.Case === "TwoSelected" ? (((gameBoard.Selection.Fields[0].Status.Equals(new Model.TileStatus("Matched", [])) ? gameBoard.Selection.Fields[1].Status.Equals(new Model.TileStatus("Matched", [])) : false) ? !tile.Equals(gameBoard.Selection.Fields[0]) : false) ? !tile.Equals(gameBoard.Selection.Fields[1]) : false) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
 
-                break;
+            switch ($var86[0]) {
+                case 0:
+                    (function (arg00) {
+                        Model.modelChangeEvent.Trigger(arg00);
+                    })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
+                        var Status = new Model.TileStatus("AttemptingMatch", []);
+                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status);
+                    }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
+                        var Status_1 = new Model.TileStatus("AttemptingMatch", []);
+                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_1);
+                    }(), gameBoard)));
 
-            case 1:
-                var $var99 = gameBoard.Selection.Case === "TwoSelected" ? gameBoard.Selection.Fields[0].Status.Equals(new Model.TileStatus("Matched", [])) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
+                    break;
 
-                switch ($var99[0]) {
-                    case 0:
-                        (function (arg00_1) {
-                            Model.modelChangeEvent.Trigger(arg00_1);
-                        })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [tile]), Model.GameBoardModule.updateTile($var99[2].Row, $var99[2].Col, function () {
-                            var Status_1 = new Model.TileStatus("UnMatched", []);
-                            return new Model.Tile($var99[2].Row, $var99[2].Col, $var99[2].HiddenColor, $var99[2].CoverColor, Status_1);
-                        }(), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                            var Status_2 = new Model.TileStatus("AttemptingMatch", []);
-                            return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_2);
-                        }(), gameBoard))));
+                case 1:
+                    var $var87 = gameBoard.Selection.Case === "TwoSelected" ? ((gameBoard.Selection.Fields[0].Status.Equals(new Model.TileStatus("Matched", [])) ? !tile.Equals(gameBoard.Selection.Fields[0]) : false) ? !tile.Equals(gameBoard.Selection.Fields[1]) : false) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
 
-                        break;
+                    switch ($var87[0]) {
+                        case 0:
+                            (function (arg00_1) {
+                                Model.modelChangeEvent.Trigger(arg00_1);
+                            })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
+                                var Status_2 = new Model.TileStatus("AttemptingMatch", []);
+                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_2);
+                            }()]), Model.GameBoardModule.updateTile($var87[2].Row, $var87[2].Col, function () {
+                                var Status_3 = new Model.TileStatus("UnMatched", []);
+                                return new Model.Tile($var87[2].Row, $var87[2].Col, $var87[2].HiddenColor, $var87[2].CoverColor, Status_3);
+                            }(), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
+                                var Status_4 = new Model.TileStatus("AttemptingMatch", []);
+                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_4);
+                            }(), gameBoard))));
 
-                    case 1:
-                        var $var100 = gameBoard.Selection.Case === "TwoSelected" ? gameBoard.Selection.Fields[1].Status.Equals(new Model.TileStatus("Matched", [])) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
+                            break;
 
-                        switch ($var100[0]) {
-                            case 0:
-                                (function (arg00_2) {
-                                    Model.modelChangeEvent.Trigger(arg00_2);
-                                })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
-                                    var Status_3 = new Model.TileStatus("AttemptingMatch", []);
-                                    return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_3);
-                                }()]), Model.GameBoardModule.updateTile($var100[1].Row, $var100[1].Col, function () {
-                                    var Status_4 = new Model.TileStatus("UnMatched", []);
-                                    return new Model.Tile($var100[1].Row, $var100[1].Col, $var100[1].HiddenColor, $var100[1].CoverColor, Status_4);
-                                }(), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                                    var Status_5 = new Model.TileStatus("AttemptingMatch", []);
-                                    return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_5);
-                                }(), gameBoard))));
+                        case 1:
+                            var $var88 = gameBoard.Selection.Case === "TwoSelected" ? ((gameBoard.Selection.Fields[1].Status.Equals(new Model.TileStatus("Matched", [])) ? !tile.Equals(gameBoard.Selection.Fields[0]) : false) ? !tile.Equals(gameBoard.Selection.Fields[1]) : false) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
 
-                                break;
+                            switch ($var88[0]) {
+                                case 0:
+                                    (function (arg00_2) {
+                                        Model.modelChangeEvent.Trigger(arg00_2);
+                                    })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
+                                        var Status_5 = new Model.TileStatus("AttemptingMatch", []);
+                                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_5);
+                                    }()]), Model.GameBoardModule.updateTile($var88[1].Row, $var88[1].Col, function () {
+                                        var Status_6 = new Model.TileStatus("UnMatched", []);
+                                        return new Model.Tile($var88[1].Row, $var88[1].Col, $var88[1].HiddenColor, $var88[1].CoverColor, Status_6);
+                                    }(), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
+                                        var Status_7 = new Model.TileStatus("AttemptingMatch", []);
+                                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_7);
+                                    }(), gameBoard))));
 
-                            case 1:
-                                var $var101 = gameBoard.Selection.Case === "TwoSelected" ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : gameBoard.Selection.Case === "OneSelected" ? gameBoard.Selection.Fields[0].HiddenColor === tile.HiddenColor ? [1, gameBoard.Selection.Fields[0]] : [2] : [2];
+                                    break;
 
-                                switch ($var101[0]) {
-                                    case 0:
-                                        (function (arg00_3) {
-                                            Model.modelChangeEvent.Trigger(arg00_3);
-                                        })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
-                                            var Status_6 = new Model.TileStatus("AttemptingMatch", []);
-                                            return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_6);
-                                        }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                                            var Status_7 = new Model.TileStatus("AttemptingMatch", []);
-                                            return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_7);
-                                        }(), Model.GameBoardModule.updateTile($var101[2].Row, $var101[2].Col, function () {
-                                            var Status_8 = new Model.TileStatus("UnMatched", []);
-                                            return new Model.Tile($var101[2].Row, $var101[2].Col, $var101[2].HiddenColor, $var101[2].CoverColor, Status_8);
-                                        }(), Model.GameBoardModule.updateTile($var101[1].Row, $var101[1].Col, function () {
-                                            var Status_9 = new Model.TileStatus("UnMatched", []);
-                                            return new Model.Tile($var101[1].Row, $var101[1].Col, $var101[1].HiddenColor, $var101[1].CoverColor, Status_9);
-                                        }(), gameBoard)))));
+                                case 1:
+                                    var $var89 = gameBoard.Selection.Case === "TwoSelected" ? (!tile.Equals(gameBoard.Selection.Fields[0]) ? !tile.Equals(gameBoard.Selection.Fields[1]) : false) ? [0, gameBoard.Selection.Fields[0], gameBoard.Selection.Fields[1]] : [1] : [1];
 
-                                        break;
-
-                                    case 1:
-                                        (function (arg00_4) {
-                                            Model.modelChangeEvent.Trigger(arg00_4);
-                                        })(Model.GameBoardModule.updateSelected(new Model.Selection("TwoSelected", [function () {
-                                            var Status_10 = new Model.TileStatus("Matched", []);
-                                            return new Model.Tile($var101[1].Row, $var101[1].Col, $var101[1].HiddenColor, $var101[1].CoverColor, Status_10);
-                                        }(), function () {
-                                            var Status_11 = new Model.TileStatus("Matched", []);
-                                            return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_11);
-                                        }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                                            var Status_12 = new Model.TileStatus("Matched", []);
-                                            return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_12);
-                                        }(), Model.GameBoardModule.updateTile($var101[1].Row, $var101[1].Col, function () {
-                                            var Status_13 = new Model.TileStatus("Matched", []);
-                                            return new Model.Tile($var101[1].Row, $var101[1].Col, $var101[1].HiddenColor, $var101[1].CoverColor, Status_13);
-                                        }(), gameBoard))));
-
-                                        break;
-
-                                    case 2:
-                                        if (gameBoard.Selection.Case === "OneSelected") {
-                                            (function (arg00_5) {
-                                                Model.modelChangeEvent.Trigger(arg00_5);
-                                            })(Model.GameBoardModule.updateSelected(new Model.Selection("TwoSelected", [gameBoard.Selection.Fields[0], function () {
-                                                var Status_14 = new Model.TileStatus("AttemptingMatch", []);
-                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_14);
-                                            }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                                                var Status_15 = new Model.TileStatus("AttemptingMatch", []);
-                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_15);
-                                            }(), gameBoard)));
-                                        } else if (gameBoard.Selection.Case === "NoneSelected") {
-                                            (function (arg00_6) {
-                                                Model.modelChangeEvent.Trigger(arg00_6);
+                                    switch ($var89[0]) {
+                                        case 0:
+                                            (function (arg00_3) {
+                                                Model.modelChangeEvent.Trigger(arg00_3);
                                             })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
-                                                var Status_16 = new Model.TileStatus("AttemptingMatch", []);
-                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_16);
+                                                var Status_8 = new Model.TileStatus("AttemptingMatch", []);
+                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_8);
                                             }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
-                                                var Status_17 = new Model.TileStatus("AttemptingMatch", []);
-                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_17);
-                                            }(), gameBoard)));
-                                        } else {
-                                            throw new Error("C:\\Users\\Tom Prior\\Google Drive\\d\\FableProjs\\memory-tiles\\src\\MemoryTiles.fsx", 266, 14);
-                                        }
+                                                var Status_9 = new Model.TileStatus("AttemptingMatch", []);
+                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_9);
+                                            }(), Model.GameBoardModule.updateTile($var89[2].Row, $var89[2].Col, function () {
+                                                var Status_10 = new Model.TileStatus("UnMatched", []);
+                                                return new Model.Tile($var89[2].Row, $var89[2].Col, $var89[2].HiddenColor, $var89[2].CoverColor, Status_10);
+                                            }(), Model.GameBoardModule.updateTile($var89[1].Row, $var89[1].Col, function () {
+                                                var Status_11 = new Model.TileStatus("UnMatched", []);
+                                                return new Model.Tile($var89[1].Row, $var89[1].Col, $var89[1].HiddenColor, $var89[1].CoverColor, Status_11);
+                                            }(), gameBoard)))));
 
-                                        break;
-                                }
+                                            break;
 
-                                break;
-                        }
+                                        case 1:
+                                            var $var90 = gameBoard.Selection.Case === "OneSelected" ? (gameBoard.Selection.Fields[0].HiddenColor === tile.HiddenColor ? !tile.Equals(gameBoard.Selection.Fields[0]) : false) ? [0, gameBoard.Selection.Fields[0]] : [1] : [1];
 
-                        break;
-                }
+                                            switch ($var90[0]) {
+                                                case 0:
+                                                    (function (arg00_4) {
+                                                        Model.modelChangeEvent.Trigger(arg00_4);
+                                                    })(Model.GameBoardModule.updateSelected(new Model.Selection("TwoSelected", [function () {
+                                                        var Status_12 = new Model.TileStatus("Matched", []);
+                                                        return new Model.Tile($var90[1].Row, $var90[1].Col, $var90[1].HiddenColor, $var90[1].CoverColor, Status_12);
+                                                    }(), function () {
+                                                        var Status_13 = new Model.TileStatus("Matched", []);
+                                                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_13);
+                                                    }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
+                                                        var Status_14 = new Model.TileStatus("Matched", []);
+                                                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_14);
+                                                    }(), Model.GameBoardModule.updateTile($var90[1].Row, $var90[1].Col, function () {
+                                                        var Status_15 = new Model.TileStatus("Matched", []);
+                                                        return new Model.Tile($var90[1].Row, $var90[1].Col, $var90[1].HiddenColor, $var90[1].CoverColor, Status_15);
+                                                    }(), gameBoard))));
 
-                break;
+                                                    break;
+
+                                                case 1:
+                                                    var $var91 = gameBoard.Selection.Case === "OneSelected" ? !tile.Equals(gameBoard.Selection.Fields[0]) ? [0, gameBoard.Selection.Fields[0]] : [1] : [1];
+
+                                                    switch ($var91[0]) {
+                                                        case 0:
+                                                            (function (arg00_5) {
+                                                                Model.modelChangeEvent.Trigger(arg00_5);
+                                                            })(Model.GameBoardModule.updateSelected(new Model.Selection("TwoSelected", [$var91[1], function () {
+                                                                var Status_16 = new Model.TileStatus("AttemptingMatch", []);
+                                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_16);
+                                                            }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
+                                                                var Status_17 = new Model.TileStatus("AttemptingMatch", []);
+                                                                return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_17);
+                                                            }(), gameBoard)));
+
+                                                            break;
+
+                                                        case 1:
+                                                            var $var92 = gameBoard.Selection.Case === "NoneSelected" ? !tile.Status.Equals(new Model.TileStatus("Matched", [])) ? [0] : [1] : [1];
+
+                                                            switch ($var92[0]) {
+                                                                case 0:
+                                                                    (function (arg00_6) {
+                                                                        Model.modelChangeEvent.Trigger(arg00_6);
+                                                                    })(Model.GameBoardModule.updateSelected(new Model.Selection("OneSelected", [function () {
+                                                                        var Status_18 = new Model.TileStatus("AttemptingMatch", []);
+                                                                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_18);
+                                                                    }()]), Model.GameBoardModule.updateTile(tile.Row, tile.Col, function () {
+                                                                        var Status_19 = new Model.TileStatus("AttemptingMatch", []);
+                                                                        return new Model.Tile(tile.Row, tile.Col, tile.HiddenColor, tile.CoverColor, Status_19);
+                                                                    }(), gameBoard)));
+
+                                                                    break;
+
+                                                                case 1:
+                                                                    break;
+                                                            }
+
+                                                            break;
+                                                    }
+
+                                                    break;
+                                            }
+
+                                            break;
+                                    }
+
+                                    break;
+                            }
+
+                            break;
+                    }
+
+                    break;
+            }
         }
     };
 

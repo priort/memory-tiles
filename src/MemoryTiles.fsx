@@ -8,143 +8,24 @@ Node.require.Invoke("core-js") |> ignore
 
 let possibleColors = 
     [
-        "AntiqueWhite"
-        "Aqua"
-        "Aquamarine"
-        "Azure"
         "Beige"
-        "Bisque"
-        "BlanchedAlmond"
         "Blue"
-        "BlueViolet"
         "Brown"
-        "BurlyWood"
-        "CadetBlue"
-        "Chartreuse"
-        "Chocolate"
-        "Coral"
-        "CornflowerBlue"
-        "Cornsilk"
         "Crimson"
-        "Cyan"
-        "DarkBlue"
-        "DarkCyan"
-        "DarkGoldenRod"
-        "DarkGray"
-        "DarkGrey"
-        "DarkGreen"
-        "DarkKhaki"
-        "DarkMagenta"
-        "DarkOliveGreen"
-        "DarkOrange"    
-        "DarkOrchid"
-        "DarkRed"
-        "DarkSalmon"
-        "DarkSeaGreen"
-        "DarkSlateBlue"
-        "DarkSlateGray"
-        "DarkTurquoise"    
-        "DarkViolet"
-        "DeepPink"    
-        "DeepSkyBlue"
-        "DimGray"
-        "DimGrey"
-        "DodgerBlue"
-        "FireBrick"
-        "FloralWhite"
-        "ForestGreen"
-        "Fuchsia"    
-        "Gainsboro"
-        "GhostWhite"    
-        "Gold"
-        "GoldenRod"
-        "Gray"
+        "Cyan"  
         "Grey"
         "Green"
-        "GreenYellow"
-        "HoneyDew"
-        "HotPink"    
-        "IndianRed"
         "Indigo"
-        "Ivory"
-        "Khaki"
-        "Lavender"
-        "LavenderBlush"
-        "LawnGreen"
-        "LemonChiffon"
-        "LightBlue"
-        "LightCoral"
-        "LightCyan"
-        "LightGoldenRodYellow"    
-        "LightGray"
-        "LightGrey"
-        "LightGreen"
-        "LightPink"
-        "LightSalmon"
-        "LightSeaGreen"
-        "LightSkyBlue"
-        "LightSlateGray"
-        "LightSlateGrey"
-        "LightSteelBlue"
-        "LightYellow"
         "Lime"
-        "LimeGreen"
-        "Linen"
         "Magenta"
-        "Maroon"
-        "MediumAquaMarine"
-        "MediumBlue"
-        "MediumOrchid"
-        "MediumPurple"
-        "MediumSeaGreen"
-        "MediumSlateBlue"
-        "MediumSpringGreen"
-        "MediumTurquoise"
-        "MediumVioletRed"
-        "MidnightBlue"
-        "MintCream"
-        "MistyRose"
-        "Moccasin"
-        "NavajoWhite"
         "Navy"
-        "OldLace"
-        "Olive"
-        "OliveDrab"
         "Orange"
-        "OrangeRed"
-        "Orchid"
-        "PaleGoldenRod"
-        "PaleGreen"
-        "PaleTurquoise"
-        "PaleVioletRed"
-        "PapayaWhip"
-        "PeachPuff"
-        "Peru"
         "Pink"
         "Plum"
-        "PowderBlue"
         "Purple"
-        "RebeccaPurple"
         "Red"
-        "RosyBrown"
-        "RoyalBlue"
-        "SaddleBrown"
-        "Salmon"
-        "SandyBrown"
-        "SeaGreen"
-        "SeaShell"
-        "Sienna"
         "Silver"
-        "SkyBlue"
-        "SlateBlue"
-        "SlateGray"
-        "SlateGrey"
-        "Snow"
-        "SpringGreen"
-        "SteelBlue"
-        "Tan"
-        "Teal"
-        "Thistle" 
+        "Yellow"
     ]
 
 module Model = 
@@ -262,49 +143,50 @@ module Controller =
         let board = gameBoard.Board
         let tile = board.[tileRow].[tileCol] 
         let lastSelection = gameBoard.Selection
-
-        match lastSelection with
-        | TwoSelected(t1, t2) when t1.Status = Matched && t2.Status = Matched -> 
-            gameBoard
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
-            |> GameBoard.updateSelected (OneSelected tile)
-            |> modelChangeEvent.Trigger
-        | TwoSelected(t1, t2) when t1.Status = Matched -> 
-            gameBoard
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
-            |> GameBoard.updateTile t2.Row t2.Col { t2 with Status = UnMatched }
-            |> GameBoard.updateSelected (OneSelected tile)
-            |> modelChangeEvent.Trigger
-        | TwoSelected(t1, t2) when t2.Status = Matched -> 
-            gameBoard
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
-            |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = UnMatched }
-            |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
-            |> modelChangeEvent.Trigger
-        | TwoSelected(t1, t2) -> 
-            gameBoard 
-            |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = UnMatched }
-            |> GameBoard.updateTile t2.Row t2.Col { t2 with Status = UnMatched }
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
-            |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
-            |> modelChangeEvent.Trigger
-            
-        | OneSelected t1 when t1.HiddenColor = tile.HiddenColor -> 
-            gameBoard
-            |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = Matched }
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = Matched }              
-            |> GameBoard.updateSelected (TwoSelected ({ t1 with Status = Matched },{ tile with Status = Matched }))
-            |> modelChangeEvent.Trigger
-        | OneSelected t1 -> 
-            gameBoard
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
-            |> GameBoard.updateSelected (TwoSelected (t1, { tile with Status = AttemptingMatch }))
-            |> modelChangeEvent.Trigger 
-        | NoneSelected -> 
-            gameBoard
-            |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
-            |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
-            |> modelChangeEvent.Trigger
+        if tile.Status = Matched then ()
+        else
+            match lastSelection with
+            | TwoSelected(t1, t2) when t1.Status = Matched && t2.Status = Matched && tile <> t1 && tile <> t2->
+                gameBoard
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
+                |> GameBoard.updateSelected (OneSelected { tile with Status = AttemptingMatch })
+                |> modelChangeEvent.Trigger
+            | TwoSelected(t1, t2) when t1.Status = Matched && tile <> t1 && tile <> t2 -> 
+                gameBoard
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
+                |> GameBoard.updateTile t2.Row t2.Col { t2 with Status = UnMatched }
+                |> GameBoard.updateSelected (OneSelected { tile with Status = AttemptingMatch })
+                |> modelChangeEvent.Trigger
+            | TwoSelected(t1, t2) when t2.Status = Matched && tile <> t1 && tile <> t2 -> 
+                gameBoard
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
+                |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = UnMatched }
+                |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
+                |> modelChangeEvent.Trigger
+            | TwoSelected(t1, t2) when tile <> t1 && tile <> t2 -> 
+                gameBoard 
+                |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = UnMatched }
+                |> GameBoard.updateTile t2.Row t2.Col { t2 with Status = UnMatched }
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }
+                |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
+                |> modelChangeEvent.Trigger           
+            | OneSelected t1 when t1.HiddenColor = tile.HiddenColor && tile <> t1 -> 
+                gameBoard
+                |> GameBoard.updateTile t1.Row t1.Col { t1 with Status = Matched }
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = Matched }              
+                |> GameBoard.updateSelected (TwoSelected ({ t1 with Status = Matched },{ tile with Status = Matched }))
+                |> modelChangeEvent.Trigger
+            | OneSelected t1 when tile <> t1 -> 
+                gameBoard
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
+                |> GameBoard.updateSelected (TwoSelected (t1, { tile with Status = AttemptingMatch }))
+                |> modelChangeEvent.Trigger 
+            | NoneSelected when tile.Status <> Matched -> 
+                gameBoard
+                |> GameBoard.updateTile tile.Row tile.Col { tile with Status = AttemptingMatch }              
+                |> GameBoard.updateSelected (OneSelected ({ tile with Status = AttemptingMatch }))
+                |> modelChangeEvent.Trigger
+            | _ -> ()
     
     let startGame() = modelChangeEvent.Trigger (Model.generateRandomModel 4)
     
