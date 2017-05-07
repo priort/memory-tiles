@@ -97,7 +97,7 @@ module Model =
             Selection = NoneSelected
             Board = tiles
         }
-    let modelChangeEvent = (new Event<GameBoard>())
+    let modelChangeEvent = new Event<GameBoard>()
 
 module View = 
     open Model
