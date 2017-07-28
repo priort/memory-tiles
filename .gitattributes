@@ -1,2 +1,2 @@
 * linguist-vendored
-*.fs linguist-vendored=false
+*.fsx linguist-vendored=false
